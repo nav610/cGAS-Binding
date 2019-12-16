@@ -1,7 +1,8 @@
 import argparse
 import numpy as np
-#import matplotlib.plt as plt
-
+import matplotlib.pyplot as plt
+import seaborn as sns
+import matplotlib.ticker as ticker
 parser=argparse.ArgumentParser()
 parser.add_argument("-grid","--grid",help="grid file to graph")
 parser.add_argument("-title","--title",help="title of plot")
@@ -28,5 +29,24 @@ for row in data:
     CV2_index=convert_CV2(np.round(float(row.split()[0]),2))
     CV1_index=convert_CV1(np.round(float(row.split()[1]),2))
     bias=float(row.split()[2])
-    print(int(CV2_index),int(CV1_index))
     arr[CV2_index,CV1_index]=bias
+
+arr = arr*.239
+xtick = np.around(np.linspace(-3.14,3.14,62),3)
+ytick = np.around(np.linspace(0,5.5,552),3)
+
+#plt.figure(figsize=(10,10))
+graph = sns.heatmap(arr,vmin=np.amin(arr),vmax=np.amax(arr),xticklabels=xtick,
+    yticklabels=ytick)
+for ind,label in enumerate(graph.get_xticklabels()):
+    if ind%10 == 0:
+        label.set_visible(True)
+    else: label.set_visible(False)
+for ind,label in enumerate(graph.get_yticklabels()):
+    if ind%50 == 0:
+        label.set_visible(True)
+    else: label.set_visible(False)
+graph.set(xlabel='phi [rad]',ylabel='d [nm]')
+
+
+plt.show()
