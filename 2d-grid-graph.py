@@ -22,8 +22,7 @@ for i in f.readlines()[9:]:
     else:data.append(i)
 
 previous_angle = float(data[0].split()[1])
-local=[]
-arr=[]
+local,arr=[],[]
 for row in data:
     angle = float(row.split()[1])
     if angle == previous_angle:
@@ -33,12 +32,14 @@ for row in data:
         previous_angle=angle
         local=[]
         local.append(float(row.split()[2]))
+
 arr =np.array(arr)* .239
+
 ytick = np.around(np.linspace(-3.14,3.14,62),3)
 cmap = sns.light_palette("navy")
-
 graph = sns.heatmap(arr,vmin=np.amin(arr),vmax=np.amax(arr),
     yticklabels=ytick,cmap=cmap)
+
 for ind,label in enumerate(graph.get_yticklabels()):
     if ind%5 == 0:
         label.set_visible(True)
