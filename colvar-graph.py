@@ -17,3 +17,10 @@ graph = sns.scatterplot(x=CV2,y=CV1,marker="+")
 graph.set(ylim=(-3.2,3.2))
 graph.set(xlim=(0,5.5))
 plt.show()
+
+time=np.arange(0,len(CV2),1)*.0002
+phi_graph = sns.scatterplot(x=time,y=CV1,marker="+")
+plt.show()
+
+distance_graph = sns.scatterplot(x=time,y=CV2,marker="+")
+plt.show()
