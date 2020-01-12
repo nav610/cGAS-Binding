@@ -1,6 +1,7 @@
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 import seaborn as sns
 import matplotlib.ticker as ticker
 parser=argparse.ArgumentParser()
@@ -34,9 +35,12 @@ for row in data:
         local.append(float(row.split()[2]))
 
 arr =np.array(arr)* .239
+cmap = matplotlib.colors.ListedColormap(['black','indigo','mediumvioletred',
+    'orangered','darkorange','bisque'])
+bounds = [0,1,2,3,4,5,6,7]
 
 ytick = np.around(np.linspace(-3.14,3.14,62),3)
-cmap = sns.light_palette("navy")
+#cmap = sns.light_palette("navy")
 graph = sns.heatmap(arr,vmin=np.amin(arr),vmax=np.amax(arr),
     yticklabels=ytick,cmap=cmap)
 
@@ -44,6 +48,6 @@ for ind,label in enumerate(graph.get_yticklabels()):
     if ind%5 == 0:
         label.set_visible(True)
     else: label.set_visible(False)
-
+graph.set_xlim(0,300)
 graph.set(ylabel='phi [rad]',xlabel='d [mE-11]')
 plt.show()
