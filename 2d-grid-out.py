@@ -6,6 +6,7 @@ import seaborn as sns
 import matplotlib.ticker as ticker
 import pandas as pd
 from mpl_toolkits.mplot3d import Axes3D
+
 parser=argparse.ArgumentParser()
 parser.add_argument("-grid","--grid",help="grid file to graph")
 parser.add_argument("-name","--name",help="title of plot")
@@ -45,7 +46,7 @@ for row in data:
 
 arr =np.array(arr)* .239
 arr_df = pd.DataFrame(arr)
-col = np.around(np.linspace(0,55,len(arr[0])),2)
+col = np.around(np.linspace(-55,55,len(arr[0])),2)
 row = np.around(np.linspace(-3.14,3.14,len(arr)),2)
 arr_df.columns = col
 
@@ -62,7 +63,6 @@ cmap2=sns.color_palette("RdBu",7)
 cmap3=sns.color_palette("ch:2.5,-.2,dark=.3")
 bounds = [0,1,2,3,4,5,6,7]
 arr_df=arr_df
-#print(np.gradient(arr))
 
 fig = plt.figure()
 ytick = np.around(np.linspace(-3.14,3.14,62),3)
@@ -73,7 +73,7 @@ for ind,label in enumerate(graph1.get_yticklabels()):
         label.set_visible(True)
     else: label.set_visible(False)
 
-graph1.set_xlim(0,380)
+graph1.set_xlim(550,880)
 graph1.set(ylabel='phi [rad]',xlabel='d [mE-11]')
 plt.savefig(args.name+".png")
 
