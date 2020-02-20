@@ -69,7 +69,7 @@ for i in np.arange(1,len(arr)-1):
             if val < l_top and val < l_bot and val < r_top and val < r_bot:
                 minima.append([j,i,val])
 
-minima.sort(key=lambda x: x[2])
+minima.sort(key=lambda x: x[0])
 
 cmap1= matplotlib.colors.ListedColormap(['black','indigo','mediumvioletred',
     'orangered','darkorange','bisque'])
@@ -86,23 +86,9 @@ for ind,label in enumerate(graph1.get_yticklabels()):
     if ind%10 == 0:
         label.set_visible(True)
     else: label.set_visible(False)
-
+print(minima)
 graph1.set_xlim(0,380)
 graph1.set(ylabel='phi [rad]',xlabel='d [mE-11]')
-for i in range(8):
-    print(minima[i][0])
+for i in range(len(minima)):
     graph1.plot(minima[i][0],minima[i][1],marker=".",c="black")
 plt.savefig(args.name+".png")
-
-"""
-fig=plt.figure()
-graph2=plt.contour(col,row,arr,colors='black',levels=[0,15,20,25,30,35,40,45,50])
-plt.clabel(graph2,fontsize='10',color='black')
-plt.savefig(args.name+".contour.png")
-
-fig = plt.figure()
-graph3=Axes3D(fig)
-X,Y = np.meshgrid(arr_df.columns,arr_df.index)
-graph3.plot_surface(X, Y,-arr_df.values)
-graph3.view_init(elev=35,azim=270)
-plt.savefig(args.name + ".3D.png") """
