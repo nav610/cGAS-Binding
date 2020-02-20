@@ -45,7 +45,7 @@ for row in data:
 
 arr =np.array(arr)* .239
 arr_df = pd.DataFrame(arr)
-col = np.around(np.linspace(0,55,len(arr[0])),2)
+col = np.around(np.linspace(0,5.5,len(arr[0])),2)
 row = np.around(np.linspace(-3.14,3.14,len(arr)),2)
 arr_df.columns = col
 
@@ -58,28 +58,34 @@ if args.angle0 is not None and args.d0 is not None:
 
 cmap1= matplotlib.colors.ListedColormap(['black','indigo','mediumvioletred',
     'orangered','darkorange','bisque'])
-cmap2=sns.color_palette("RdBu",7)
+cmap2=sns.color_palette("RdBu",11)
 cmap3=sns.color_palette("ch:2.5,-.2,dark=.3")
-bounds = [0,1,2,3,4,5,6,7]
-arr_df=arr_df
-#print(np.gradient(arr))
 
+min = np.min(arr[:,0:380])
+arr_df = arr_df - min
+arr = arr-min
 fig = plt.figure()
 ytick = np.around(np.linspace(-3.14,3.14,62),3)
-graph1 = sns.heatmap(-arr_df,
-        yticklabels=ytick,xticklabels=50,cmap=cmap2)
+graph1 = sns.heatmap(-arr_df.loc[:,0:3.81],
+        yticklabels=ytick,xticklabels=50,cmap=cmap3)
 for ind,label in enumerate(graph1.get_yticklabels()):
     if ind%10 == 0:
         label.set_visible(True)
     else: label.set_visible(False)
 
 graph1.set_xlim(0,380)
-graph1.set(ylabel='phi [rad]',xlabel='d [mE-11]')
+graph1.set(ylabel='phi [rad]',xlabel='d [nm]')
 plt.savefig(args.name+".png")
 
+
 fig=plt.figure()
-graph2=plt.contour(col,row,-arr,colors='black',levels=[0,15,20,25,30,35,40,45,50])
-plt.clabel(graph2,fontsize='10',color='black')
+print(np.arange(-40,0,2))
+graph2=plt.contour(np.arange(0,3.81,.01),np.linspace(-3.14,3.14,62)
+    ,-arr[:,0:381],levels=np.arange(-40,0,2))
+plt.gca().invert_yaxis()
+plt.ylabel('phi [rad]')
+plt.xlabel('d [nm]')
+plt.clabel(graph2,color='black',fontsize='5')
 plt.savefig(args.name+".contour.png")
 
 fig = plt.figure()
@@ -87,4 +93,5 @@ graph3=Axes3D(fig)
 X,Y = np.meshgrid(arr_df.columns,arr_df.index)
 graph3.plot_surface(X, Y,-arr_df.values)
 graph3.view_init(elev=35,azim=270)
+plt.show()
 plt.savefig(args.name + ".3D.png")
