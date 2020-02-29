@@ -10,6 +10,9 @@ import copy
 parser=argparse.ArgumentParser()
 parser.add_argument("-grid","--grid",help="grid file to graph")
 parser.add_argument("-images","--images",help="# of intermediate images")
+parser.add_argument("-initial","--initial", help="initial position", nargs='+')
+parser.add_argument("-final","--final", help="final position",nargs='+')
+
 args = parser.parse_args()
 data=[]
 f = open(args.grid)
@@ -31,9 +34,9 @@ for row in data:
         local.append(float(row.split()[2]))
 arr = np.array(arr)
 arr = arr.transpose()
-
-initial = np.array([100,10])
-final = np.array([300,48])
+arr = arr*.239
+initial = np.array(args.initial).astype(int)
+final = np.array(args.final).astype(int)
 arr =np.array(arr)
 
 #(1) Pick Random Path knowing the two endpoints
@@ -125,7 +128,7 @@ def sumEnergy(initPath):
 slope,const = make_line(initial,final)
 points,spacing = space_line(slope,const,initial,final,args.images)
 initPath = init_path(points,arr)
-delta,k,x0 = 20,3,5
+delta,k,x0 = 20,10,3
 calc_spring(initPath,x0, k)
 print("Init Pathway: " + "\n")
 for i in initPath: print(i.pos,i.pot,i.springLeft,i.springRight)
@@ -158,3 +161,8 @@ fig, (figure)= plt.subplots(nrows=1, figsize=(8,5))
 graph1 = sns.heatmap(-arr.transpose(),cmap=cmap3)
 for i in newPath: plt.plot(i.pos[0],i.pos[1],marker=".",color="red")
 plt.show()
+
+f = open("path_" + str(args.initial) + "-->" + str(args.final)+".txt","w")
+for value in newPath:
+    f.write(str(value.pos[1])+","+str(value.pos[0]))
+    f.write("\n")
