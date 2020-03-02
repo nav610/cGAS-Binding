@@ -67,7 +67,7 @@ arr = arr-min
 fig = plt.figure()
 ytick = np.around(np.linspace(-3.14,3.14,62),3)
 graph1 = sns.heatmap(-arr_df.loc[:,0:3.81],
-        yticklabels=ytick,xticklabels=50,cmap=cmap3)
+        yticklabels=ytick,xticklabels=50,cmap=cmap2)
 for ind,label in enumerate(graph1.get_yticklabels()):
     if ind%10 == 0:
         label.set_visible(True)
