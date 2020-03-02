@@ -136,7 +136,7 @@ for point in points:
 closestFrames.append(np.array(points[len(points)-1]))
 initPath = init_path(closestFrames,arr)
 
-delta,k,x0 = 20,1,3
+k,x0 = 3,3
 
 calc_spring(initPath,x0, k)
 print("Init Pathway: " + "\n")
