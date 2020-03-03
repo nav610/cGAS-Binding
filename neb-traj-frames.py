@@ -14,6 +14,14 @@ parser.add_argument("-initial","--initial", help="initial position", nargs='+')
 parser.add_argument("-final","--final", help="final position",nargs='+')
 
 #(1) Pick Random Path knowing the two endpoints
+def convertPitoIndex(arg):
+    a = np.linspace(-3.14,3.14,61)
+    idx = np.abs(a-float(arg)).argmin()
+    return(idx)
+
+def convertIndextoNM(arg):
+    return(int(arg*100))
+
 def make_line(initial,final):
     """Makes a straight line from intial to final"""
     slope = (final[1]-initial[1])/(final[0]-initial[0])
@@ -39,6 +47,7 @@ class image(object):
         self.pot = pot
         self.springLeft = springLeft
         self.springRight = springRight
+        self.time = None
 
 def distance(a,b):
     return(np.linalg.norm(np.array(a)-np.array(b)))
@@ -73,14 +82,16 @@ def init_path(points,arr):
 
 def perturbImage(image,arr,frames):
     oldPos = image.pos
-    newPos = perturbPos(oldPos,frames)
+    newPos,t = perturbPos(oldPos,frames)
     image.pos = newPos
     image.pot = get_potential(image.pos, arr)
+    image.time = t
 
 def perturbPos(pos,points):
     randomint = np.random.randint(0,len(points)-1)
     newPos = points[randomint]
-    return(newPos)
+    t = time[randomint]
+    return(newPos,t)
 
 def sumEnergy(initPath):
     sum=0
@@ -115,13 +126,17 @@ for row in data:
 arr = np.array(arr)
 arr = arr.transpose()
 
-initial = np.array(args.initial).astype(int)
-final = np.array(args.final).astype(int)
 
-frames = []
+initial = np.array([convertIndextoNM(float(args.initial[0])),
+    convertPitoIndex(float(args.initial[1]))])
+final = np.array([convertIndextoNM(float(args.final[0])),
+    convertPitoIndex(float(args.final[1]))])
+
+time,frames = [],[]
 f = open("frameCVS.txt")
 for i in f.readlines():
     i = i.split(",")
+    time.append(i[0])
     frames.append(np.array([int(i[1]),int(i[2])]))
 
 slope,const = make_line(initial,final)
@@ -145,7 +160,7 @@ print("\n")
 
 oldPath = copy.deepcopy(initPath)
 
-for i in range(500000):
+for i in range(250000):
     newPath = copy.deepcopy(oldPath)
     indextoAlt = np.random.randint(1,len(initPath)-1)
     perturbImage(newPath[indextoAlt],arr,frames)
@@ -160,7 +175,7 @@ for i in range(500000):
 
 print("\n"+"Final Pathway: "+"\n")
 
-for i in newPath: print(i.pos,i.pot,i.springLeft,i.springRight)
+for i in newPath: print(i.pos,i.pot,i.springLeft,i.springRight,i.time)
 
 print("\n")
 for i in range(len(initPath)):
