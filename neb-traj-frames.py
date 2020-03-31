@@ -10,8 +10,8 @@ import copy
 parser=argparse.ArgumentParser()
 parser.add_argument("-grid","--grid",help="grid file to graph")
 parser.add_argument("-images","--images",help="# of intermediate images")
-parser.add_argument("-initial","--initial", help="initial position", nargs='+')
-parser.add_argument("-final","--final", help="final position",nargs='+')
+parser.add_argument("-initial","--initial", help="initial position [nm,phi]", nargs='+')
+parser.add_argument("-final","--final", help="final position [nm,phi]",nargs='+')
 
 #(1) Pick Random Path knowing the two endpoints
 def convertPitoIndex(arg):
@@ -39,6 +39,7 @@ def space_line(slope,const,initial,final,numImages):
         y = x*slope + const
         points.append([int(x),int(y)])
     points.append([final[0],final[1]])
+    print(points,spacing)
     return(points,spacing)
 
 class image(object):
@@ -88,9 +89,13 @@ def perturbImage(image,arr,frames):
     image.time = t
 
 def perturbPos(pos,points):
-    randomint = np.random.randint(0,len(points)-1)
-    newPos = points[randomint]
-    t = time[randomint]
+    x,y = np.random.randint(-10,10),np.random.randint(-10,10)
+
+    offset= np.array([x,y])
+    value = pos + offset 
+    closest = min(points, key=lambda x: distance(x,value))
+    newPos = closest
+    t = 0
     return(newPos,t)
 
 def sumEnergy(initPath):
@@ -100,8 +105,9 @@ def sumEnergy(initPath):
     return(sum)
 
 def findClosest(value,a):
-    index = np.abs(value-a).argmin()
-    return(a[index])
+    index = np.linalg.norm(np.abs(value-a)).argmin()
+    closest = min(a, key=lambda x: distance(x,value))
+    return(closest)
 
 args = parser.parse_args()
 data=[]
@@ -124,7 +130,7 @@ for row in data:
         local.append(float(row.split()[2]))
 
 arr = np.array(arr)
-arr = arr.transpose()
+arr = arr.transpose()/4.14
 
 
 initial = np.array([convertIndextoNM(float(args.initial[0])),
@@ -144,14 +150,17 @@ points,spacing = space_line(slope,const,initial,final,args.images)
 
 closestFrames=[]
 closestFrames.append(np.array(points[0]))
-
+print(points)
 for point in points:
     if points.index(point)!= 0 or points.index(point)!= len(points)-1:
-        closestFrames.append(findClosest(np.array(point),frames))
+        ranIDX = np.random.randint(1,len(points)-1)
+        closestFrames.append(frames[ranIDX])
+        #closestFrames.append(findClosest(np.array(point),frames))
+
 closestFrames.append(np.array(points[len(points)-1]))
 initPath = init_path(closestFrames,arr)
 
-k,x0 = 3,3
+k,x0 = 4,10
 
 calc_spring(initPath,x0, k)
 print("Init Pathway: " + "\n")
@@ -160,6 +169,7 @@ print("\n")
 
 oldPath = copy.deepcopy(initPath)
 
+steps = 0 
 for i in range(250000):
     newPath = copy.deepcopy(oldPath)
     indextoAlt = np.random.randint(1,len(initPath)-1)
@@ -171,8 +181,10 @@ for i in range(250000):
         + "  " + str(-float(sumEnergy(oldPath))+ float(sumEnergy(newPath))))
     if sumEnergy(oldPath)>sumEnergy(newPath):
         oldPath = copy.deepcopy(newPath)
-
-
+        steps = 0
+    if steps > 10000: 
+        break
+    else: steps = steps+1 
 print("\n"+"Final Pathway: "+"\n")
 
 for i in newPath: print(i.pos,i.pot,i.springLeft,i.springRight,i.time)
@@ -184,5 +196,8 @@ for i in range(len(initPath)):
 cmap3=sns.color_palette("ch:2.5,-.2,dark=.3")
 fig, (figure)= plt.subplots(nrows=1, figsize=(8,5))
 graph1 = sns.heatmap(-arr.transpose(),cmap=cmap3)
-for i in newPath: plt.plot(i.pos[0],i.pos[1],marker=".",color="red")
+for i in newPath: 
+    plt.plot(i.pos[0],i.pos[1],marker=".",color="red")
+for i in initPath: 
+    plt.plot(i.pos[0],i.pos[1],marker='.',color="blue")
 plt.show()
