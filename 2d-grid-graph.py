@@ -60,6 +60,8 @@ cmap1= matplotlib.colors.ListedColormap(['black','indigo','mediumvioletred',
     'orangered','darkorange','bisque'])
 cmap2=sns.color_palette("RdBu",11)
 cmap3=sns.color_palette("ch:2.5,-.2,dark=.3")
+cmap4=sns.color_palette("PuBu",8)
+cmap5=plt.cm.get_cmap('Spectral')
 
 min = np.min(arr[:,0:380])
 arr_df = arr_df - min
@@ -67,7 +69,7 @@ arr = arr-min
 fig = plt.figure()
 ytick = np.around(np.linspace(-3.14,3.14,62),3)
 graph1 = sns.heatmap(-arr_df.loc[:,0:3.81],
-        yticklabels=ytick,xticklabels=50,cmap=cmap2)
+        yticklabels=ytick,xticklabels=50,cmap=cmap1)
 for ind,label in enumerate(graph1.get_yticklabels()):
     if ind%10 == 0:
         label.set_visible(True)
@@ -85,7 +87,7 @@ graph2=plt.contour(np.arange(0,3.81,.01),np.linspace(-3.14,3.14,62)
 plt.gca().invert_yaxis()
 plt.ylabel('phi [rad]')
 plt.xlabel('d [nm]')
-plt.clabel(graph2,color='black',fontsize='5')
+plt.clabel(graph2,colors='black',fontsize='5')
 plt.savefig(args.name+".contour.png")
 
 fig = plt.figure()
