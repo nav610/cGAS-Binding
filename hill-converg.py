@@ -16,5 +16,8 @@ for line in f.readlines()[4:]:
 time = np.linspace(0,int(args.time),len(hills))
 fig, (figure)= plt.subplots(nrows=1, figsize=(8,5))
 figure.plot(time,hills,color='black')
+plt.xlabel("ns")
+plt.ylabel("kJ/mol")
+plt.title("Gaussian Hill Energy Height Deposition")
 plt.savefig('hills-graphed.png')
 
