@@ -90,12 +90,12 @@ def perturbImage(image,arr,frames):
 
 def perturbPos(pos,points):
     x,y = np.random.randint(-10,10),np.random.randint(-10,10)
-
     offset= np.array([x,y])
     value = pos + offset 
-    closest = min(points, key=lambda x: distance(x,value))
-    newPos = closest
-    t = 0
+    distance_list=[]
+    for point in points:distance_list.append(distance(point,value))
+    idx = distance_list.index(min(distance_list))
+    newPos,t  = points[idx], time[idx] 
     return(newPos,t)
 
 def sumEnergy(initPath):
@@ -196,8 +196,16 @@ for i in range(len(initPath)):
 cmap3=sns.color_palette("ch:2.5,-.2,dark=.3")
 fig, (figure)= plt.subplots(nrows=1, figsize=(8,5))
 graph1 = sns.heatmap(-arr.transpose(),cmap=cmap3)
+
 for i in newPath: 
     plt.plot(i.pos[0],i.pos[1],marker=".",color="red")
-for i in initPath: 
-    plt.plot(i.pos[0],i.pos[1],marker='.',color="blue")
+for i in range(len(newPath)):
+    plt.text(newPath[i].pos[0],newPath[i].pos[1],str(i),color='black')
+    #for i in initPath: 
+#    plt.plot(i.pos[0],i.pos[1],marker='.',color="blue")
 plt.show()
+
+f = open("frames-path.txt",'w+')
+for i in newPath: 
+    f.write(str(i.time)+'   '+str(i.pos[0])+'   '+str(i.pos[1]))
+    f.write('\n')
