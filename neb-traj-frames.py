@@ -204,6 +204,7 @@ for i in range(len(newPath)):
     #for i in initPath: 
 #    plt.plot(i.pos[0],i.pos[1],marker='.',color="blue")
 plt.show()
+plt.savefig('neb-path.png')
 
 f = open("frames-path.txt",'w+')
 for i in newPath: 
