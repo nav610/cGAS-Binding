@@ -1,0 +1,10 @@
+#!/bin/bash 
+while IFS=, read time nm phi 
+do 
+	echo -e "$time and $nm and $phi"
+
+	#gmx_mpi trjconv -f .xtc -s .tpr -b $time -e $time -o $time.gro -ur compact -pbc mol
+
+	done < frames-path.txt
+
+echo -e "$time"
