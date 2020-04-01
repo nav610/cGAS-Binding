@@ -208,5 +208,6 @@ plt.savefig('neb-path.png')
 
 f = open("frames-path.txt",'w+')
 for i in newPath: 
-    f.write(str(i.time)+'   '+str(i.pos[0])+'   '+str(i.pos[1]))
-    f.write('\n')
+    if i.time!=None:
+        f.write(str(i.time)+','+str(i.pos[0])+','+str(i.pos[1]))
+        f.write('\n')
