@@ -27,15 +27,17 @@ a = np.round(a,2)
 time = 0
 for value in data:
     if (np.round(value[0],1))%200 == 0:
-        time = time +.2
         time = np.around(time,2)
         CVS.append(np.array([time,closest_value(b,value[2]),closest_value(a,value[1])]))
+        time = time +.2
+
 
 figure=plt.figure()
 for value in CVS:
     print(value)
     plt.plot(value[1],value[2],marker=".")
 plt.show()
+
 
 f = open("frameCVS.txt","w+")
 for value in CVS:
