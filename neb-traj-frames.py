@@ -193,18 +193,43 @@ print("\n")
 for i in range(len(initPath)):
     print(initPath[i].pos,newPath[i].pos)
 
+
+cmap1= matplotlib.colors.ListedColormap(['navy','indigo','mediumvioletred',
+    "mediumorchid",'orangered','darkorange','bisque'])
+cmap2=sns.color_palette("RdBu",11)
 cmap3=sns.color_palette("ch:2.5,-.2,dark=.3")
-fig, (figure)= plt.subplots(nrows=1, figsize=(8,5))
-graph1 = sns.heatmap(-arr.transpose(),cmap=cmap3)
+cmap4=sns.color_palette("PuBu",8)
+cmap5=plt.cm.get_cmap('Spectral')
+
+arr_df = pd.DataFrame(arr.transpose())
+col = np.around(np.linspace(0,5.5,len(arr.transpose()[0])),2)
+row = np.around(np.linspace(-3.14,3.14,len(arr.transpose())),2)
+arr_df.columns = col
+min = np.min(arr.transpose()[:,0:380])
+arr_df = arr_df - min
+
+xtick = np.around(np.arange(0,3.81,.01))
+ytick = np.around(np.linspace(-3.14,3.14,62),2)
+
+graph1 = sns.heatmap(-arr_df.loc[:,0:3.81],
+        yticklabels=ytick,xticklabels=xtick,cmap=cmap1)
+for ind,label in enumerate(graph1.get_yticklabels()):
+    if ind%10 == 0:
+        label.set_visible(True)
+    else: label.set_visible(False)
+
+graph1.xaxis.set_major_locator(ticker.MultipleLocator(50))
+graph1.xaxis.set_major_formatter(ticker.ScalarFormatter())
 
 for i in newPath: 
-    plt.plot(i.pos[0],i.pos[1],marker=".",color="red")
+    plt.plot(i.pos[0],i.pos[1],marker=".",markersize=4,color="white")
 for i in range(len(newPath)):
-    plt.text(newPath[i].pos[0],newPath[i].pos[1],str(i),color='black')
-    #for i in initPath: 
-#    plt.plot(i.pos[0],i.pos[1],marker='.',color="blue")
-plt.show()
+    plt.text(newPath[i].pos[0],newPath[i].pos[1],str(i),color='white')
+
+graph1.set_xlim(0,380)
+graph1.set(ylabel='phi [rad]',xlabel='d [nm]')
 plt.savefig('neb-path.png')
+plt.show()
 
 f = open("frames-path.txt",'w+')
 for i in newPath: 

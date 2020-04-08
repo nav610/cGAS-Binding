@@ -12,7 +12,6 @@ f = open(args.hill,'r')
 for line in f.readlines()[4:]:
     if not line.startswith('#'):
         hills.append(float(line.split()[len(line.split())-2])) 
-
 time = np.linspace(0,int(args.time),len(hills))
 fig, (figure)= plt.subplots(nrows=1, figsize=(8,5))
 figure.plot(time,hills,color='black')

@@ -55,9 +55,9 @@ if args.angle0 is not None and args.d0 is not None:
     d0_idx = np.where(col==find_nearest(col,d0))[0][0]
     e_const=arr_df.at[angle0_idx,col[d0_idx]]
     arr_df = arr_df - float(e_const)
-
-cmap1= matplotlib.colors.ListedColormap(['black','indigo','mediumvioletred',
-    'orangered','darkorange','bisque'])
+    
+cmap1= matplotlib.colors.ListedColormap(['navy','indigo','mediumvioletred',
+    "mediumorchid",'orangered','darkorange','bisque'])
 cmap2=sns.color_palette("RdBu",11)
 cmap3=sns.color_palette("ch:2.5,-.2,dark=.3")
 cmap4=sns.color_palette("PuBu",8)
@@ -66,6 +66,7 @@ cmap5=plt.cm.get_cmap('Spectral')
 min = np.min(arr[:,0:380])
 arr_df = arr_df - min
 arr = arr-min
+print(arr_df)
 fig = plt.figure()
 ytick = np.around(np.linspace(-3.14,3.14,62),3)
 graph1 = sns.heatmap(-arr_df.loc[:,0:3.81],
