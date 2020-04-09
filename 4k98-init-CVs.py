@@ -1,7 +1,7 @@
 import mdtraj as md
 import numpy as np
 
-t = md.load("4k98 (5).pdb")
+t = md.load("4k98-init.pdb")
 top = t.topology
 
 def findXYZ(index,trajxyz):
