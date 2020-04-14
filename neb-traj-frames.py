@@ -160,7 +160,7 @@ for point in points:
 closestFrames.append(np.array(points[len(points)-1]))
 initPath = init_path(closestFrames,arr)
 
-k,x0 = 4,10
+k,x0 = 1,3
 
 calc_spring(initPath,x0, k)
 print("Init Pathway: " + "\n")
@@ -231,7 +231,7 @@ graph1.set(ylabel='phi [rad]',xlabel='d [nm]')
 plt.savefig('neb-path.png')
 plt.show()
 
-f = open("frames-path.txt",'w+')
+f = open("frames-path2.txt",'w+')
 for i in newPath: 
     if i.time!=None:
         f.write(str(i.time)+','+str(i.pos[0])+','+str(i.pos[1]))
