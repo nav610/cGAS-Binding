@@ -72,14 +72,14 @@ arr_df = arr_df - min
 
 fig = plt.figure()
 ytick = np.around(np.linspace(-3.14,3.14,62),3)
-graph1 = sns.heatmap(-arr_df.loc[:,0:3.81],yticklabels=5,
+graph1 = sns.heatmap(-arr_df,yticklabels=5,
         xticklabels=50,cmap=cmap1,cbar_kws={'label': 'kcal/mol'})
 """for ind,label in enumerate(graph1.get_yticklabels()):
     if ind%10 == 0:
         label.set_visible(True)
     else: label.set_visible(False)"""
 
-graph1.set_xlim(0,210)
+graph1.set_xlim(60,310)
 graph1.set(ylabel='CV2 [rad]',xlabel='CV1 [nm]')
 
 for i in frames: 
@@ -90,9 +90,9 @@ for i in range(len(frames)):
 plt.savefig(args.name + "-path.png")
 
 fig = plt.figure()
-graph1 = sns.heatmap(-arr_df.loc[:,0:3.82],yticklabels=5,
+graph1 = sns.heatmap(-arr_df,yticklabels=5,
         xticklabels=50,cmap=cmap1,cbar_kws={'label': 'kcal/mol'})
-graph1.set_xlim(0,310)
+graph1.set_xlim(60,310)
 graph1.set(ylabel='CV2 [rad]',xlabel='CV1 [nm]')
 #graph1.xaxis.set_ajor_formatter(FormatStrFormatter('%.1f'))
 plt.savefig(args.name  + "-norm.png")
