@@ -22,17 +22,20 @@ def return_2D_matrix(stan,protien):
 		out.append([stan,atom])
 	return out
 
-def find_3A(distMatrix,time,atom):
+def find_3A(distMatrix,nn,atom):
 	out = []
 	for i in range(len(distMatrix)): 
 		dist = distMatrix[i]
 		if dist < .4:
-			out.append([time,dist,atom,i])
+			time = .2*nn
+			resname = resnames[i]
+			out.append([time,dist,atom,i,resname])
 	return out
 
 
 traj,top = load_traj(args.xtc,args.gro,1)
 
+resnames = [atom.residue for atom in top.atoms]
 atom = top.select(str(args.atom))
 print(atom)
 
@@ -51,7 +54,7 @@ for nn in range(traj.n_frames):
 f = open(args.atom+".txt","w+")
 for nn in range(traj.n_frames):
 	for line in lessThan3A[nn]: 
-		f.write(str(line[0]) + "," +str(line[1]) + "," + str(line[2]) + "," + str(line[3]))
+		f.write(str(line[0]) + "," +str(line[1]) + "," + str(line[2]) + "," + str(line[3]) + "," + str(line[4]))
 		f.write("\n")
 f.close()
 
