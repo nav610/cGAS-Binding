@@ -7,6 +7,7 @@ import matplotlib.ticker as ticker
 import pandas as pd
 from mpl_toolkits.mplot3d import Axes3D
 import copy
+
 parser=argparse.ArgumentParser()
 parser.add_argument("-grid","--grid",help="grid file to graph")
 parser.add_argument("-images","--images",help="# of intermediate images")
@@ -89,7 +90,7 @@ def perturbImage(image,arr,frames):
     image.time = t
 
 def perturbPos(pos,points):
-    x,y = np.random.randint(-10,10),np.random.randint(-10,10)
+    x,y = np.random.randint(-10,-1),np.random.randint(-10,10)
     offset= np.array([x,y])
     value = pos + offset 
     distance_list=[]
