@@ -72,7 +72,10 @@ for i in range(len(frames)-1):
 	newFrames = make_line(point1,point2)
 	for frame in newFrames:
 		appendedFrames.append(frame)
-appendedFrames.append(frames[len(frames)-1])
+
+i = len(frames)-1
+final_frame = np.array([int(frames[i][1]),int(frames[i][0])])
+appendedFrames.append(final_frame)
 
 arrFrameVal = []
 initPoint = frames[0]
@@ -80,6 +83,7 @@ print(initPoint)
 min = arr[int(initPoint[1]),int(initPoint[0])]
 arr=arr-min
 
+print(appendedFrames)
 for frame in appendedFrames: 
     arrFrameVal.append(-arr[int(frame[0]),int(frame[1])])
 
@@ -87,10 +91,15 @@ x = np.arange(0,len(arrFrameVal),1)
 
 fig, graph1 = plt.subplots() 
 plt.scatter(x,arrFrameVal,marker='.',color='black')
-labels_new=[',','initial','','','','','','','final']
+labels_new=[',','initial','','','','','','final']
 graph1.set_xticklabels(labels_new)
 plt.ylabel('kcal/mol')
 plt.xlabel('Reaction Coordinate')
 plt.title('1D Path')
 plt.savefig('1D-Path.png')
 
+f = open("frames-path-all.txt","w+")
+for frame in appendedFrames:
+    f.write(str(frame[1])+','+str(frame[0]))
+    f.write('\n')
+f.close()
