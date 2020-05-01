@@ -10,6 +10,8 @@ parser.add_argument("-atom", "--atom", help = "atom, resSeq ? and name ?")
 
 args = parser.parse_args() 
 
+uniqueResList = [] 
+
 def load_traj(xtc,top,stride):
 	traj=md.load(str(xtc), top = str(top), stride = int(stride))
 	print("Number of Frames Loaded:" + str(traj.n_frames))
@@ -30,6 +32,7 @@ def find_3A(distMatrix,nn,atom):
 			time = .2*nn
 			resname = resnames[i]
 			out.append([time,dist,atom,i,resname])
+			uniqueResList.append(resname)
 	return out
 
 
@@ -37,7 +40,6 @@ traj,top = load_traj(args.xtc,args.gro,1)
 
 resnames = [atom.residue for atom in top.atoms]
 atom = top.select(str(args.atom))
-print(atom)
 
 cGAS = top.select("protein")
 
@@ -58,6 +60,13 @@ for nn in range(traj.n_frames):
 		f.write("\n")
 f.close()
 
+setUniqueResList = list(set(uniqueResList))
+
+f = open(args.atom+"uniqueRes.txt","w+")
+for item in setUniqueResList: 
+	f.write(str(item))
+	f.write("\n")
+f.close()
 
 
 
