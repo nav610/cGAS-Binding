@@ -45,7 +45,7 @@ for row in data:
 
 arr =np.array(arr)* .239
 arr_df = pd.DataFrame(arr)
-col = np.around(np.linspace(0,5.5,len(arr[0])),1)
+col = np.around(np.linspace(0,4.0,len(arr[0])),1)
 row = np.around(np.linspace(-3.14,3.14,len(arr)),2)
 arr_df.columns = col
 
@@ -64,13 +64,13 @@ cmap3=sns.color_palette("ch:2.5,-.2,dark=.3")
 cmap4=sns.color_palette("PuBu",8)
 cmap5=plt.cm.get_cmap('Spectral')
 
-min = np.min(arr[:,0:380])
-arr_df = arr_df - min
-arr = arr-min
+#min = np.min(arr[:,0:380])
+#arr_df = arr_df - min
+#arr = arr-min
 print(arr_df)
 fig = plt.figure()
 ytick = np.around(np.linspace(-3.14,3.14,62),3)
-graph1 = sns.heatmap(-arr_df.loc[:,0:3.81],
+graph1 = sns.heatmap(-arr_df,
         yticklabels=ytick,xticklabels=50,cmap=cmap1,cbar_kws={'label': 'kcal/mol'})
 for ind,label in enumerate(graph1.get_yticklabels()):
     if ind%10 == 0:
@@ -81,6 +81,7 @@ graph1.set_xlim(0,380)
 graph1.set(ylabel='CV2 [rad]',xlabel='CV1 [nm]')
 plt.savefig(args.name+".png")
 
+"""
 
 fig=plt.figure()
 print(np.arange(-40,0,2))
@@ -98,3 +99,4 @@ X,Y = np.meshgrid(arr_df.columns,arr_df.index)
 graph3.plot_surface(X, Y,-arr_df.values)
 graph3.view_init(elev=35,azim=270)
 plt.savefig(args.name + ".3D.png")
+"""
